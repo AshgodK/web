@@ -74,7 +74,7 @@
         function connexionUser($email,$password)
 		{
 			$db = config::getConnexion();
-			$sql = "SELECT * FROM user WHERE email='" . $email . "'and password= '". $password." ' " ;
+			$sql = "SELECT * FROM user WHERE email='" . $email . "'and pwd= '". $password." ' " ;
 			try
 			{
 				$query=$db->prepare($sql);
@@ -89,9 +89,9 @@
 				{
 					$x=$query->fetch();
 					$message=$x['email'];
-					$_SESSION['nom'] = $result->nom ;
-					$_SESSION['id'] = $result->id ;
-					$_SESSION['prenom']=$result->prenom ;
+					$_SESSION['name'] = $result->name ;
+					$_SESSION['user_id'] = $result->user_id ;
+					$_SESSION['pwd']=$result->pwd ;
 					$_SESSION['email']=$result->email ;
                     $_SESSION['role']=$result->role;
 					echo "$message";

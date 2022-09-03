@@ -9,11 +9,38 @@
         function afficherpost()
         {
             $requete = "select * from posts";
+            $db = config::getConnexion();
+            try{
+            $liste = $db->query($requete);
+            return $liste;
+        }
+        catch (Exception $e){
+            die('Erreur: '.$e->getMessage());
+        }
+            
+        }
+
+        function afficherpostCateg($cat)
+        {
+            $sql= "select * from posts where post_id=:cat";
+            $db = config::getConnexion();
+            $req=$db->prepare($sql);
+            $req->bindValue(':cat',$cat);
+            try{
+                $req->execute();
+            }
+            catch (Exception $e){
+                die('Erreur: '.$e->getMessage());
+            }
+        }
+
+function searchpost($search)
+        {
+            $requete = "select * from posts  WHERE (title LIKE '%$search%' or category LIKE '%$search%' or author LIKE '%$search%') ";
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare($requete);
                 $querry->execute();
-                $result = $querry->fetchAll(PDO::FETCH_COLUMN, 1);
                 $result = $querry->fetchAll();
                 return $result ;
             } catch (PDOException $th) {
@@ -21,18 +48,17 @@
             }
         }
 
-        function afficherpostCateg($string)
+        function searchblog($name)
         {
-            $requete = "select * from posts where category=:categ";
-            $config = config::getConnexion();
-            try {
-                $querry = $config->prepare($requete);
-                $querry->execute(['categ'=>$string]);
-                //$result = $querry->fetchAll(PDO::FETCH_COLUMN, 1);
-                $result = $querry->fetchAll();
-                return $result ;
-            } catch (PDOException $th) {
-                 $th->getMessage();
+            $sql= "SELECT * FROM posts WHERE category=:name";
+            $db = config::getConnexion();
+            $req=$db->prepare($sql);
+            $req->bindValue(':name',$name);
+            try{
+                $req->execute();
+            }
+            catch (Exception $e){
+                die('Erreur: '.$e->getMessage());
             }
         }
 
@@ -51,6 +77,20 @@
                 return $result ;
             } catch (PDOException $th) {
                  $th->getMessage();
+            }
+        }
+        function recupererpost($postID){
+            $sql="SELECT * from posts where post_id=:postID";
+            $db = config::getConnexion();
+            try{
+                $query=$db->prepare($sql);
+                $query->execute();
+
+                $post=$query->fetch();
+                return $post;
+            }
+            catch (Exception $e){
+                die('Erreur: '.$e->getMessage());
             }
         }
 
@@ -78,6 +118,7 @@
                 (:title, :title, :author, :contents, :category, :img)
                 ');
                 $querry->execute([
+                    'post_id'=>$post->getid(),
                     'title'=>$post->gettitle(),
                     'contents'=>$post->getcontent(),
                     'author'=>$post->getauthor(),
@@ -97,13 +138,12 @@
                 UPDATE posts SET
                 title=:title,contents=:contents,author=:author,category=:category
                 where post_id=:id');
-                
                 $querry->execute([
                     'id'=>$post->getid(),
                     'title'=>$post->gettitle(),
                     'contents'=>$post->getcontent(),
                     'author'=>$post->getauthor(),
-                    'category'=>$post->getcateg()
+                    'category'=>$post->get_categ()
 
                   
                 ]);
@@ -116,10 +156,10 @@
 
         function supprimerpost($id)
         {
-            $sql="DELETE FROM posts WHERE post_id= :id_user";
+            $sql="DELETE FROM posts WHERE post_id= :id";
 			$db = config::getConnexion();
 			$req=$db->prepare($sql);
-			$req->bindValue(':id_user',$id);
+			$req->bindValue(':id',$id);
 			try{
 				$req->execute();
 			}
@@ -129,5 +169,28 @@
         }
 
 
-        
+        function triertitle()
+    {
+       $sql = "SELECT * from posts ORDER BY title ASC";
+       $db = config::getConnexion();
+       try {
+           $req = $db->query($sql);
+           return $req;
+       } catch (Exception $e)
+        {
+           die('Erreur: ' . $e->getMessage());
+       }
+    }
+    function trierid()
+    {
+       $sql = "SELECT * from posts ORDER BY category asc";
+       $db = config::getConnexion();
+       try {
+           $req = $db->query($sql);
+           return $req;
+       } catch (Exception $e)
+        {
+           die('Erreur: ' . $e->getMessage());
+       }
+    }
     }
