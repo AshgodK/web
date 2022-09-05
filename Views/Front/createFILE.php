@@ -52,7 +52,7 @@ include 'footer.php'
 ?>"; 
 $yry="session_start();&quot";
 fwrite($myfile, $txt); 
-fwrite($myfile, "$"."test=".$t.$yry); 
+
 
                      
 fclose($myfile);

@@ -80,19 +80,19 @@ if (isset($_REQUEST['add']) || isset($_REQUEST['edit'])) {
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="index.php">
+          <a class="navbar-brand brand-logo" href="../front/author.php">
             <img src="images/ft.png" alt="logo" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="index.html">
-            <img src="images/ft.png" alt="logo" />
-          </a>
+          
         </div>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-top"> 
         <ul class="navbar-nav">
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
             <h1 class="welcome-text">Hello, <span class="text-black fw-bold"> writer </span></h1>
+
             <h3 class="welcome-sub-text"> </h3>
+
           
           </li>
         </ul>
@@ -100,7 +100,8 @@ if (isset($_REQUEST['add']) || isset($_REQUEST['edit'])) {
           <span class="mdi mdi-menu"></span>
         </button>
       </div>
-    </nav>  
+    </nav> 
+
 <div class="container-scroller">
 
 

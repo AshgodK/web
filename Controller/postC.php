@@ -8,6 +8,19 @@
 
         function afficherpost()
         {
+            $requete = "select * from posts where state=1";
+            $db = config::getConnexion();
+            try{
+            $liste = $db->query($requete);
+            return $liste;
+        }
+        catch (Exception $e){
+            die('Erreur: '.$e->getMessage());
+        }
+            
+        }
+        function afficherpostA()
+        {
             $requete = "select * from posts";
             $db = config::getConnexion();
             try{
@@ -20,23 +33,11 @@
             
         }
 
-        function afficherpostCateg($cat)
-        {
-            $sql= "select * from posts where post_id=:cat";
-            $db = config::getConnexion();
-            $req=$db->prepare($sql);
-            $req->bindValue(':cat',$cat);
-            try{
-                $req->execute();
-            }
-            catch (Exception $e){
-                die('Erreur: '.$e->getMessage());
-            }
-        }
+        
 
 function searchpost($search)
         {
-            $requete = "select * from posts  WHERE (title LIKE '%$search%' or category LIKE '%$search%' or author LIKE '%$search%') ";
+            $requete = "select * from posts  WHERE (title LIKE '%$search%' or category LIKE '%$search%' or author LIKE '%$search%') and state=1 ";
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare($requete);
@@ -79,33 +80,9 @@ function searchpost($search)
                  $th->getMessage();
             }
         }
-        function recupererpost($postID){
-            $sql="SELECT * from posts where post_id=:postID";
-            $db = config::getConnexion();
-            try{
-                $query=$db->prepare($sql);
-                $query->execute();
+        
 
-                $post=$query->fetch();
-                return $post;
-            }
-            catch (Exception $e){
-                die('Erreur: '.$e->getMessage());
-            }
-        }
-
-        function getpostbyTitle($title){
-            $req = "select * from posts where title = :title";
-            $config = config::getConnexion();
-            try{
-                $query = $config->prepare($req);
-                $query->execute(['title'=>$title]);
-                $result = $query->fetch();
-                return $result;
-            } catch(PDOException $th){
-                $th->getMessage();
-            }
-        }
+        
 
         function ajouterpost($post)
         {
@@ -127,6 +104,19 @@ function searchpost($search)
                 ]);
             } catch (PDOException $th) {
                  $th->getMessage();
+            }
+        }
+        function updatestate($id)
+        {
+            $sql= "UPDATE posts SET state=1 where post_id=:id";
+            $db = config::getConnexion();
+            $req=$db->prepare($sql);
+            $req->bindValue(':id',$id);
+            try{
+                $req->execute();
+            }
+            catch (Exception $e){
+                die('Erreur: '.$e->getMessage());
             }
         }
         
@@ -193,4 +183,18 @@ function searchpost($search)
            die('Erreur: ' . $e->getMessage());
        }
     }
+    function countpost(){
+
+            $sql="SELECT count(post_id) FROM posts " ;
+            $db = config::getConnexion();
+            try{
+                $query = $db->query($sql);
+                $query->execute();
+                   $prog_number =$query->fetchColumn();
+                return $prog_number;
+            }
+            catch(Exception $e){
+                die('Erreur: '.$e->getMessage());
+            }   
+        }
     }

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,11 +17,11 @@ include 'head.php'
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="../front/registre.php">
-            <img src="images/logo.jpg" alt="logo" />
+          <a class="navbar-brand brand-logo" href="../front/index.php">
+            <img src="images/logo.png" alt="logo" />
           </a>
           <a class="navbar-brand brand-logo-mini" href="../../index.html">
-            <img src="images/logo.svg" alt="logo" />
+            <img src="images/logo.png" alt="logo" />
           </a>
         </div>
       </div>
@@ -34,12 +33,7 @@ include 'head.php'
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown d-none d-lg-block">
-                                       <form method="POST" action="trieruser.php">
-                                    
-                                                  <input type="submit" name="trier" value="trier" class="btn btn-success">
-                                       </form>
-          </li>
+          
           <li class="nav-item">
           <button type="submit" class="btn btn-success" onClick="window.print()">Imprimer</button>
           </li>
@@ -248,8 +242,14 @@ include 'head.php'
                       <?PHP
                     
                       require_once '../../controller/userCont.php';
-                      
-                    $list=afficherclients();
+                      require_once '../../model/user.php';
+                      $userC = new userC();
+if (isset($_GET['id'])) {
+  $eventToEdit = $userC->getuserbyID($_GET['id']);
+}
+require_once '../../Controller/postC.php';
+
+                    $list=$userC->afficherclients();
                     
 
                        foreach($list as $userc)
@@ -270,14 +270,14 @@ include 'head.php'
           <td align="center"><?PHP echo $userc['pwd']; ?></td>
           <td align="center"><?PHP echo $userc['user_id']; ?></td>
           <td>
-						<form method="POST" action="supprimer.php">
-						<input type="submit" class="btn btn-danger btn-fw" name="supprimer" value="supprimer">
-						<input type="hidden" value=<?PHP echo $userc['user_id']; ?> name="id">
-						</form>
-					</td>
-					<td>
-						<a class="btn btn-primary btn-fw" href="modifieruser.php?id=<?PHP echo $userc['user_id']; ?>"> Modifier </a>
-					</td>
+            <form method="POST" action="supprimer.php">
+            <input type="submit" class="btn btn-danger btn-fw" name="supprimer" value="supprimer">
+            <input type="hidden" value=<?PHP echo $userc['user_id']; ?> name="id">
+            </form>
+          </td>
+          <td>
+            <a class="btn btn-primary btn-fw" href="modifieruser.php?id=<?PHP echo $userc['user_id']; ?>"> Modifier </a>
+          </td>
           <td>
           <a class="btn btn-primary btn-fw" href="Mail.php?id=<?php echo $userc['user_id']?>"> envoyer un mail </a>
            

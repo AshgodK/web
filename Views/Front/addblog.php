@@ -75,6 +75,7 @@ if (isset($_REQUEST['add']) || isset($_REQUEST['edit'])) {
  <?php
 include "nav-bar.php";
 ?>   
+
 <div class="container-scroller">
 
 

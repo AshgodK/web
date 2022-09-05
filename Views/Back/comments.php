@@ -1,5 +1,5 @@
 <?php
-$idc="50";
+$idc="53";
 
 
 
@@ -111,6 +111,13 @@ $listeEvents =$commentC->searchcom($idc);
                             <?php if(isset($commentC['content'])): ?>
                             <?php echo $commentC["content"]; ?>
                             <?php endif; ?>
+                          </td>
+                          <td style="text-align: right;">
+                         
+            <form method="POST" action="delCom.php">
+            <input type="submit" class="btn btn-danger btn-fw" name="supprimer" value="supprimer">
+            <input type="hidden" value=<?PHP echo $commentC['id_com']; ?> name="id">
+            </form>
                           </td>
                         
                         </tr>

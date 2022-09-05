@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
         </div>
         <div>
           <a class="navbar-brand brand-logo" href="../front/registre.php">
-            <img src="images/logo.jpg" alt="logo" />
+            <img src="images/logo.png" alt="logo" />
           </a>
           <a class="navbar-brand brand-logo-mini" href="../../index.html">
             <img src="images/logo.svg" alt="logo" />
@@ -43,9 +43,9 @@ if (isset($_GET['id'])) {
         </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item dropdown d-none d-lg-block">
-                                       <form method="POST" action="afficher.php">
+                                       <form method="POST" action="postB.php">
                                     
-                                                  <input type="submit" name="trier" value="trier" class="btn btn-success">
+                                                  <input type="submit" name="back" value="back" class="btn btn-success">
                                        </form>
           </li>
           <li class="nav-item">

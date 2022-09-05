@@ -6,11 +6,12 @@ require_once '../../model/post.php';
 
 
 $postC = new postC();
+$count = $postC->countpost();
 if (isset($_GET['id'])) {
   $eventToEdit = $postC->getpostbyID($_GET['id']);
 }
 require_once '../../Controller/postC.php';
-$listeEvents =$postC->afficherpost();
+$listeEvents =$postC->afficherpostA();
 
 
 if (isset($_REQUEST['add']) || isset($_REQUEST['edit'])) {
@@ -64,7 +65,7 @@ if (isset($_REQUEST['add']) || isset($_REQUEST['edit'])) {
           }
           header('Location:postB.php');
       } else {
-          echo 'chyyyyyyyy2';
+          
           header('Location:blank_post.php');
       }
   }
@@ -144,22 +145,30 @@ include "side-bar.php";
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">posts</h4>
-                  <li class="nav-item dropdown d-none d-lg-block">
-                                       <form method="POST" action="trierID.php">
-                                    
-                                                  <input type="submit" name="trier" value="trier category" class="btn btn-success">
-                                       </form>
-                                       <form method="POST" action="triertitle.php">
-                                    
-                                                  <input type="submit" name="trier" value="trier title" class="btn btn-success">
-                                       </form>
-          </li>
+                    <table>
+                      <thead>
+                        <tr>
+                         <td>
+                  
+                             <form method="POST" action="trierID.php">
+                                   <input type="submit" name="trier" value="trier category" class="btn btn-success">
+                             </form>
+                              </td>
+                              <td>
+                             <form method="POST" action="triertitle.php">
+                                   <input type="submit" name="trier" value="trier title" class="btn btn-success">
+                             </form>
+                              </td>
+                              </tr>
+                              </thead>
+                              </table>
+          
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
                         <tr>
                           <th>
-                            ID
+                            state
                           </th>
                           <th>
                             title
@@ -181,6 +190,9 @@ include "side-bar.php";
                             Edit
                           </th>
                           <th>
+                            accept
+                          </th>
+                          <th>
                             Delete
                           </th>
                         </tr>
@@ -190,8 +202,8 @@ include "side-bar.php";
                         ?>
                         <tr>
                           <td>
-                            <?php if(isset($postC['post_id'])): ?>
-                            <?php echo $postC["post_id"]; ?>
+                            <?php if(isset($postC['state'])): ?>
+                            <?php echo $postC["state"]; ?>
                             <?php endif; ?>
                           </td>
                           <td>
@@ -229,7 +241,14 @@ include "side-bar.php";
 
                           </td>
                           <td>
-                          <form method="POST" action="supprimer.php">
+                             <form method="POST" action="updatestate.php">
+            <input type="submit" class="btn btn-danger btn-fw" name="accept" value="accept">
+            <input type="hidden" value=<?PHP echo $postC['post_id']; ?> name="id">
+            </form>
+                          </td>
+                          <td>
+                         
+            <form method="POST" action="supprimer.php">
             <input type="submit" class="btn btn-danger btn-fw" name="supprimer" value="supprimer">
             <input type="hidden" value=<?PHP echo $postC['post_id']; ?> name="id">
             </form>
@@ -255,30 +274,93 @@ include "side-bar.php";
             </div>
           </div>
         </div>
+        
+          <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Charts</h4>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <canvas id="bar-chart-horizontal" width="800" height="200"></canvas>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          
+
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Export</h4>
+                <a href="export.php">
+                  <button class="btn btn-danger">Export Excel</button>
+              </div>
+            </div>
+          </div>
+        
 
 
-  </div>
-  <!-- container-scroller -->
-  <!-- plugins:js -->
-  <script src="../../vendors/js/vendor.bundle.base.js"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="../../vendors/select2/select2.min.js"></script>
-  <script src="../../vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="../../js/off-canvas.js"></script>
-  <script src="../../js/hoverable-collapse.js"></script>
-  <script src="../../js/template.js"></script>
-  <script src="../../js/settings.js"></script>
-  <script src="../../js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="../../js/file-upload.js"></script>
-  <script src="../../js/typeahead.js"></script>
-  <script src="../../js/select2.js"></script>
-  <!-- End custom js for this page-->
+
+    </div>
+
+
+
+    <!-- plugins:js -->
+    <script src="vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="vendors/chart.js/Chart.min.js"></script>
+    <script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="vendors/progressbar.js/progressbar.min.js"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="js/off-canvas.js"></script>
+    <script src="js/hoverable-collapse.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/Chart.roundedBarCharts.js"></script>
+    <!-- End custom js for this page-->
+    <script>
+      new Chart(document.getElementById("bar-chart-horizontal"), {
+        type: 'horizontalBar',
+        data: {
+          labels: ["Posts"],
+          datasets: [{
+            label: "Nombre posts",
+            backgroundColor: ["#3e95cd", "#8e5ea2"],
+            data: [<?php echo $count; ?>]
+          }]
+        },
+        options: {
+          scales: {
+            xAxes: [{
+              ticks: {
+                stepSize: 1
+              }
+            }]
+          },
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Nombre des posts'
+          }
+        }
+      });
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+            
 </body>
 
 </html>

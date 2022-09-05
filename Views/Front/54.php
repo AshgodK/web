@@ -4,4 +4,4 @@ include 'temp.php'
 include 'comments.php'
 ?><?php  
 include 'footer.php'
-?>$test=54session_start();&quot
+?>

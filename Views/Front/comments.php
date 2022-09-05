@@ -1,5 +1,5 @@
 <?php
-$idc="54";
+$idc="59";
 
 
 
@@ -8,7 +8,7 @@ include '../../Controller/commentC.php';
 
 
 require_once '../../model/comment.php';
-
+$ref=$idc.'php';
 
 $commentC = new commentC();
 if (isset($_GET['id'])) {
@@ -128,10 +128,12 @@ $commentC = new commentC();
                         <?php foreach ($listeEvents as $commentC) {
                         ?>
                         <tr>
-                          <td>
+                          <td >
                             <?php if(isset($commentC['content'])): ?>
                             <?php echo $commentC["content"]; ?>
-                            <?php endif; ?>
+                            <?php endif; 
+                          ?>
+
                           </td>
                         
                         </tr>

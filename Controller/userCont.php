@@ -5,29 +5,59 @@
 
 
     Class userC {
+          
 
-
-
-
-     
-
-
-
+function ajouteruser($newuser)
+        {
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare('
+                INSERT INTO user
+                (nom,prenom,sexe,email,login,date_n,password)
+                VALUES
+                (:nom,:prenom,:sexe,:email,:login,:date_n,:password)
+                ');
+                $querry->execute([
+                    'nom'=>$newuser->nom,
+                    'prenom'=>$newuser->prenom,
+                    'sexe'=>$newuser->sexe,
+                    'email'=>$newuser->email,
+                    'login'=>$newuser->login,
+                    'date_n'=>$newuser->date_n,
+                    'password'=>$newuser->password
+                ]);
+            } catch (PDOException $th) {
+                echo $th->getMessage();
+            }
+        }
+         function supprimeruser($id)
+        {
+            $sql="DELETE FROM user WHERE id= :id";
+            $db = config::getConnexion();
+            $req=$db->prepare($sql);
+            $req->bindValue(':id',$id);
+            try{
+                $req->execute();
+            }
+            catch (Exception $e){
+                die('Erreur: '.$e->getMessage());
+            }
+        }
         function modifieruser($newuser, $id){
-			try {
-				$db = config::getConnexion();
-				$query = $db->prepare(
-					'UPDATE user SET 
-						nom = :nom, 
-						prenom = :prenom,
+            try {
+                $db = config::getConnexion();
+                $query = $db->prepare(
+                    'UPDATE user SET 
+                        nom = :nom, 
+                        prenom = :prenom,
                         sexe = :sexe,
-						email = :email,
+                        email = :email,
                         login = :login,
                         date_n=:date_n,
-						password = :password
-					WHERE id= :id'
-				);
-				$query->execute([
+                        password = :password
+                    WHERE id= :id'
+                );
+                $query->execute([
                     'nom'=>$newuser->nom,
                     'prenom'=>$newuser->prenom,
                     'sexe'=>$newuser->sexe,
@@ -36,14 +66,13 @@
                     'date_n'=>$newuser->date_n,
                     'password'=>$newuser->password,
                     'id'=>$id
-				]);
-			
-			} catch (PDOException $th) {
-				echo $th->getMessage() ;
+                ]);
+            
+            } catch (PDOException $th) {
+                echo $th->getMessage() ;
                 
-			}
-		}
-
+            }
+        }
 
         function recupMail($id){
             $db = config::getConnexion();
@@ -56,7 +85,7 @@
             catch (Exception $e){
                 die('Erreur: '.$e->getMessage());
             }
-        }	
+        }   
         function recuprole($id){
             $db = config::getConnexion();
             $sql="SELECT role FROM user where email=$id";
@@ -68,9 +97,32 @@
             catch (Exception $e){
                 die('Erreur: '.$e->getMessage());
             }
-        }	
-          
-
+        }
+function recherche($idcategorie)
+        {
+            $sql="SELECT * from user where nom=$idcategorie";
+            $db = config::getConnexion();
+            try{
+            $req=$db->query($sql);
+            return $req;
+            }
+            catch (Exception $e){
+                die('Erreur: '.$e->getMessage());
+            }
+        }
+function trierNom()
+    {
+       $sql = "SELECT * from user ORDER BY nom ASC";
+       $db = config::getConnexion();
+       try {
+           $req = $db->query($sql);
+           return $req;
+       } catch (Exception $e)
+        {
+           die('Erreur: ' . $e->getMessage());
+       }
+    }
+       
         function connexionUser($email,$password)
 		{
 			$db = config::getConnexion();
@@ -108,23 +160,7 @@
 			return $message;
 		}
 
-        function recherche($idcategorie)
-        {
-            $sql="SELECT * from user where nom=$idcategorie";
-            $db = config::getConnexion();
-            try{
-            $req=$db->query($sql);
-            return $req;
-            }
-            catch (Exception $e){
-                die('Erreur: '.$e->getMessage());
-            }
-        }
-  
-
-
-
-
+        
         function getuserbyID($id)
         {
             $requete = "select * from user where id=:id";
@@ -143,49 +179,8 @@
             }
         }
 
-        function ajouteruser($newuser)
-        {
-            $config = config::getConnexion();
-            try {
-                $querry = $config->prepare('
-                INSERT INTO user
-                (nom,prenom,sexe,email,login,date_n,password)
-                VALUES
-                (:nom,:prenom,:sexe,:email,:login,:date_n,:password)
-                ');
-                $querry->execute([
-                    'nom'=>$newuser->nom,
-                    'prenom'=>$newuser->prenom,
-                    'sexe'=>$newuser->sexe,
-                    'email'=>$newuser->email,
-                    'login'=>$newuser->login,
-                    'date_n'=>$newuser->date_n,
-                    'password'=>$newuser->password
-                ]);
-            } catch (PDOException $th) {
-                echo $th->getMessage();
-            }
-        }
-       
-
-
-
-        function supprimeruser($id)
-        {
-            $sql="DELETE FROM user WHERE id= :id";
-			$db = config::getConnexion();
-			$req=$db->prepare($sql);
-			$req->bindValue(':id',$id);
-			try{
-				$req->execute();
-			}
-			catch (Exception $e){
-				die('Erreur: '.$e->getMessage());
-			}
-        }
-    }
-    function afficherclients(){
-			
+        function afficherclients(){
+            
         $sql="SELECT * FROM user";
         $db = config::getConnexion();
         try{
@@ -194,19 +189,10 @@
         }
         catch (Exception $e){
             die('Erreur: '.$e->getMessage());
-        }	
+        }   
     }
-    function trierNom()
-    {
-       $sql = "SELECT * from user ORDER BY nom ASC";
-       $db = config::getConnexion();
-       try {
-           $req = $db->query($sql);
-           return $req;
-       } catch (Exception $e)
-        {
-           die('Erreur: ' . $e->getMessage());
-       }
     }
+    
+    
    
   ?>
